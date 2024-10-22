@@ -121,9 +121,9 @@ res_lst4 = np.array(res_lst4)
 
 # Plotting
 fig, ax = plt.subplots(figsize=(12, 8))  # Set figure size to expand the graph
-ax.plot(x, res_lst1, label="Investment Growth (Assumption 1)", linestyle='--')
-ax.plot(x, res_lst3, label="Investment Growth (Assumption 3)", linestyle='-')
-ax.plot(x, res_lst4, label="Investment Growth (Assumption 4)", linestyle='-.')
+ax.plot(x, res_lst1, label="Saving Amount Every Year", linestyle='--')
+ax.plot(x, res_lst3, label="Increase Rate of One-off Investment", linestyle='-')
+ax.plot(x, res_lst4, label="Increase Rate of One-off Investment with inflation:", linestyle='-.')
 ax.scatter(x, res_lst1, color='blue')  # Show original data points for Assumption 1
 ax.scatter(x, res_lst3, color='red')   # Show original data points for Assumption 3
 ax.scatter(x, res_lst4, color='green') # Show original data points for Assumption 4
