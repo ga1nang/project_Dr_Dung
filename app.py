@@ -2,83 +2,184 @@ import matplotlib.pyplot as plt
 import streamlit as st
 import numpy as np
 
-def calculate_assumtion1(target, years, annual_rate):
+# def calculate_assumtion1(target, years, annual_rate):
+#     res = 0
+    
+#     for i in range(years):
+#         res += ((1 + annual_rate)**(years - i))
+#     return target / res
+
+# def test_calculate_assumtion1(x, years, annual_rate):
+#     res = 0
+#     x_lst = []
+#     sum_lst = []
+#     x_lst.append(x)
+#     sum_lst.append(x)
+#     if years > 1:
+#         for i in range(1, years):
+#             x_lst.append(x)
+#             sum_lst.append(sum_lst[-1] * (1 + annual_rate) + x_lst[i])
+
+#     sum_lst.append(sum_lst[years - 1] * (1 + annual_rate))
+#     return x_lst, sum_lst
+
+def calculate_assumtion1(target, years, annual_rate, init_wealth):
     res = 0
     for i in range(years):
-        res += ((1 + annual_rate)**(years - i))
-    return target / res
+        res += ((1 + annual_rate) ** (years - i))
+    
+    # Calculate the future value of the initial wealth after accounting for annual growth
+    future_value_of_init_wealth = init_wealth * ((1 + annual_rate) ** years)
+    
+    # Adjust the target by subtracting the future value of the initial wealth
+    adjusted_target = target - future_value_of_init_wealth
+    return adjusted_target / res
 
-def test_calculate_assumtion1(x, years, annual_rate):
-    res = 0
+def test_calculate_assumtion1(x, years, annual_rate, init_wealth):
+    res = init_wealth
     x_lst = []
     sum_lst = []
+    # Start with initial wealth grown over the first year
+    sum_lst.append(init_wealth * (1 + annual_rate) + x)
     x_lst.append(x)
-    sum_lst.append(x)
+    
     if years > 1:
         for i in range(1, years):
             x_lst.append(x)
             sum_lst.append(sum_lst[-1] * (1 + annual_rate) + x_lst[i])
 
+    # Append the final year’s growth
     sum_lst.append(sum_lst[years - 1] * (1 + annual_rate))
     return x_lst, sum_lst
 
-def calculate_assumtion3(target, years, annual_rate, increase_investment_rate):
+# def calculate_assumtion3(target, years, annual_rate, increase_investment_rate):
+#     res = 0
+#     investment_rate = 1
+#     total_rate = investment_rate
+#     for i in range(years):
+#         res += ((1 + annual_rate)**(years - i) * investment_rate)
+#         investment_rate *= (1 + increase_investment_rate)
+
+#     return target / res
+
+# def test_calculate_assumtion3(x, years, annual_rate, increase_investment_rate):
+#     res = 0
+#     investment_rate = 1
+#     total_rate = investment_rate
+#     x_lst = []
+#     sum_lst = []
+#     x_lst.append(x)
+#     sum_lst.append(x)
+    
+#     if years > 1:
+#         for i in range(1, years):
+#             x *= (1 + increase_investment_rate)
+#             x_lst.append(x)
+#             sum_lst.append(sum_lst[i - 1] * 1.05 + x_lst[i])
+
+#     sum_lst.append(sum_lst[years - 1] * 1.05)
+#     return x_lst, sum_lst
+
+def calculate_assumtion3(target, years, annual_rate, increase_investment_rate, init_wealth):
     res = 0
     investment_rate = 1
-    total_rate = investment_rate
     for i in range(years):
-        res += ((1 + annual_rate)**(years - i) * investment_rate)
+        res += ((1 + annual_rate) ** (years - i) * investment_rate)
         investment_rate *= (1 + increase_investment_rate)
+    
+    # Calculate future value of initial wealth with annual growth
+    future_value_of_init_wealth = init_wealth * ((1 + annual_rate) ** years)
+    
+    # Adjust the target by subtracting the future value of the initial wealth
+    adjusted_target = target - future_value_of_init_wealth
+    return adjusted_target / res
 
-    return target / res
-
-def test_calculate_assumtion3(x, years, annual_rate, increase_investment_rate):
-    res = 0
+def test_calculate_assumtion3(x, years, annual_rate, increase_investment_rate, init_wealth):
     investment_rate = 1
-    total_rate = investment_rate
     x_lst = []
     sum_lst = []
+    # Start with initial wealth grown over the first year
+    sum_lst.append(init_wealth * (1 + annual_rate) + x)
     x_lst.append(x)
-    sum_lst.append(x)
     
     if years > 1:
         for i in range(1, years):
             x *= (1 + increase_investment_rate)
             x_lst.append(x)
-            sum_lst.append(sum_lst[i - 1] * 1.05 + x_lst[i])
+            sum_lst.append(sum_lst[-1] * (1 + annual_rate) + x_lst[i])
 
-    sum_lst.append(sum_lst[years - 1] * 1.05)
+    # Append the final year's growth
+    sum_lst.append(sum_lst[-1] * (1 + annual_rate))
     return x_lst, sum_lst
 
-def calculate_assumption4(target, years, annual_rate, increase_investment_rate, inflation_rate):
+
+
+# def calculate_assumption4(target, years, annual_rate, increase_investment_rate, inflation_rate):
+#     res = 0
+#     effective_rate = (1 + annual_rate) / (1 + inflation_rate) - 1
+#     effective_investment_rate = (1 + increase_investment_rate) / (1 + inflation_rate)
+#     for i in range(years):
+#         res += ((1 + effective_rate)**(years - i) * (effective_investment_rate**i))
+
+#     return target / res
+
+# def test_calculate_assumtion4(x, years, annual_rate, increase_investment_rate, inflation_rate):
+#     investment_rate = 1
+#     x_lst = []
+#     sum_lst = []
+#     x_lst.append(x)
+#     sum_lst.append(x)
+#     effective_rate = (1 + annual_rate) / (1 + inflation_rate) - 1
+#     effective_investment_rate = (1 + increase_investment_rate) / (1 + inflation_rate) - 1
+
+#     for i in range(1, years):
+#         x *= ((1 + effective_investment_rate))
+#         x_lst.append(x)
+
+#         new_sum = sum_lst[i - 1] * (1 + effective_rate) + x_lst[i]
+#         sum_lst.append(new_sum)
+
+#     final_sum = sum_lst[-1] * (1 + annual_rate) / (1 + inflation_rate)
+#     sum_lst.append(final_sum)
+
+#     return x_lst, sum_lst
+
+def calculate_assumption4(target, years, annual_rate, increase_investment_rate, inflation_rate, init_wealth):
     res = 0
     effective_rate = (1 + annual_rate) / (1 + inflation_rate) - 1
     effective_investment_rate = (1 + increase_investment_rate) / (1 + inflation_rate)
+    
     for i in range(years):
-        res += ((1 + effective_rate)**(years - i) * (effective_investment_rate**i))
+        res += ((1 + effective_rate) ** (years - i) * (effective_investment_rate ** i))
+    
+    # Calculate the future value of initial wealth accounting for effective annual growth
+    future_value_of_init_wealth = init_wealth * ((1 + effective_rate) ** years)
+    
+    # Adjust the target by subtracting the future value of the initial wealth
+    adjusted_target = target - future_value_of_init_wealth
+    return adjusted_target / res
 
-    return target / res
-
-def test_calculate_assumtion4(x, years, annual_rate, increase_investment_rate, inflation_rate):
-    investment_rate = 1
+def test_calculate_assumtion4(x, years, annual_rate, increase_investment_rate, inflation_rate, init_wealth):
+    effective_rate = (1 + annual_rate) / (1 + inflation_rate) - 1
+    effective_investment_rate = (1 + increase_investment_rate) / (1 + inflation_rate)
     x_lst = []
     sum_lst = []
+    # Start with initial wealth grown over the first year
+    sum_lst.append(init_wealth * (1 + effective_rate) + x)
     x_lst.append(x)
-    sum_lst.append(x)
-    effective_rate = (1 + annual_rate) / (1 + inflation_rate) - 1
-    effective_investment_rate = (1 + increase_investment_rate) / (1 + inflation_rate) - 1
-
+    
     for i in range(1, years):
-        x *= ((1 + effective_investment_rate))
+        x *= effective_investment_rate
         x_lst.append(x)
+        sum_lst.append(sum_lst[-1] * (1 + effective_rate) + x_lst[i])
 
-        new_sum = sum_lst[i - 1] * (1 + effective_rate) + x_lst[i]
-        sum_lst.append(new_sum)
-
-    final_sum = sum_lst[-1] * (1 + annual_rate) / (1 + inflation_rate)
+    # Append the final year's growth adjusted for the effective rate
+    final_sum = sum_lst[-1] * (1 + effective_rate)
     sum_lst.append(final_sum)
-
+    
     return x_lst, sum_lst
+
+
 
 # Streamlit app
 st.title("Wealth Development Calculator")
@@ -94,9 +195,9 @@ inflation_rate = st.number_input("Inflation Rate", min_value=0.0, value=3.0, ste
 increased_inflation_rate = st.number_input("Increase rate of inflation", min_value=0.0, value=3.0, step=0.1) / 100
 
 # Calculate annual investments for each assumption
-annual_investment_assumption1 = calculate_assumtion1(target, years, annual_rate)
-annual_investment_assumption3 = calculate_assumtion3(target, years, annual_rate, increase_investment_rate)
-annual_investment_assumption4 = calculate_assumption4(target, years, annual_rate, increase_investment_rate, inflation_rate)
+annual_investment_assumption1 = calculate_assumtion1(target, years, annual_rate, init_wealth)
+annual_investment_assumption3 = calculate_assumtion3(target, years, annual_rate, increase_investment_rate, init_wealth)
+annual_investment_assumption4 = calculate_assumption4(target, years, annual_rate, increase_investment_rate, inflation_rate, init_wealth)
 
 # Display calculated annual investments
 st.write(f"Saving Amount Every Year: {annual_investment_assumption1:.2f} €")
@@ -104,9 +205,9 @@ st.write(f"Increase Rate of One-off Investment: {annual_investment_assumption3:.
 st.write(f"Increase Rate of One-off Investment with inflation: {annual_investment_assumption4:.2f} €")
 
 # Calculate investment growth for all assumptions
-x_lst1, res_lst1 = test_calculate_assumtion1(annual_investment_assumption1, years, annual_rate)
-x_lst3, res_lst3 = test_calculate_assumtion3(annual_investment_assumption3, years, annual_rate, increase_investment_rate)
-x_lst4, res_lst4 = test_calculate_assumtion4(annual_investment_assumption4, years, annual_rate, increase_investment_rate, inflation_rate)
+x_lst1, res_lst1 = test_calculate_assumtion1(annual_investment_assumption1, years, annual_rate, init_wealth)
+x_lst3, res_lst3 = test_calculate_assumtion3(annual_investment_assumption3, years, annual_rate, increase_investment_rate, init_wealth)
+x_lst4, res_lst4 = test_calculate_assumtion4(annual_investment_assumption4, years, annual_rate, increase_investment_rate, inflation_rate, init_wealth)
 
 # Determine y-axis limit based on the maximum value from all assumptions
 y_limit = max(max(res_lst1), max(res_lst3), max(res_lst4)) + 200
@@ -123,7 +224,7 @@ res_lst4 = np.array(res_lst4)
 fig, ax = plt.subplots(figsize=(12, 8))  # Set figure size to expand the graph
 ax.plot(x, res_lst1, label="Saving Amount Every Year", linestyle='--')
 ax.plot(x, res_lst3, label="Increase Rate of One-off Investment", linestyle='-')
-ax.plot(x, res_lst4, label="Increase Rate of One-off Investment with inflation:", linestyle='-.')
+ax.plot(x, res_lst4, label="Increase Rate of One-off Investment with inflation", linestyle='-.')
 ax.scatter(x, res_lst1, color='blue')  # Show original data points for Assumption 1
 ax.scatter(x, res_lst3, color='red')   # Show original data points for Assumption 3
 ax.scatter(x, res_lst4, color='green') # Show original data points for Assumption 4
